@@ -13,6 +13,12 @@ module.exports.create = async (req, res, next) => {
 module.exports.fet = async (req, res, next) => {
   try {
     const { userid } = req.body;
+    const exist = await taskModel.exists({ userid });
+    if (exist == null) {
+      return res
+        .status(404)
+        .json({ msg: "User does not exist", exist, status: false });
+    }
     const tasks = await taskModel.find({ userid });
     return res.status(200).json({ msg: "All Tasks", tasks, status: true });
     // return res.json({ msg: "Task created", status: true });
@@ -24,10 +30,16 @@ module.exports.fet = async (req, res, next) => {
 module.exports.markt = async (req, res, next) => {
   try {
     const { id } = req.body;
+    const exist = await taskModel.exists({ _id: id });
+    if (exist == null) {
+      return res
+        .status(404)
+        .json({ msg: "Task does not exist", exist, status: false });
+    }
     const task = await taskModel.findByIdAndUpdate(id, {
       completed: true,
     });
-    return res.status(200).json({ msg: "Marked Done",task, status: true });
+    return res.status(200).json({ msg: "Marked Done", task, status: true });
   } catch (ex) {
     next(ex);
   }
@@ -36,6 +48,12 @@ module.exports.markt = async (req, res, next) => {
 module.exports.markf = async (req, res, next) => {
   try {
     const { id } = req.body;
+    const exist = await taskModel.exists({ _id: id });
+    if (exist == null) {
+      return res
+        .status(404)
+        .json({ msg: "Task does not exist", exist, status: false });
+    }
     const task = await taskModel.findByIdAndUpdate(id, {
       completed: false,
     });
@@ -48,6 +66,12 @@ module.exports.markf = async (req, res, next) => {
 module.exports.update = async (req, res, next) => {
   try {
     const { id, text } = req.body;
+    const exist = await taskModel.exists({ _id: id });
+    if (exist == null) {
+      return res
+        .status(404)
+        .json({ msg: "Task does not exist", exist, status: false });
+    }
     const task = await taskModel.findByIdAndUpdate(id, {
       task: text,
     });
@@ -60,6 +84,12 @@ module.exports.update = async (req, res, next) => {
 module.exports.pending = async (req, res, next) => {
   try {
     const { userid } = req.body;
+    const exist = await taskModel.exists({ userid });
+    if (exist == null) {
+      return res
+        .status(404)
+        .json({ msg: "User does not exist", exist, status: false });
+    }
     const task = await taskModel.find({ userid, completed: false });
     return res
       .status(200)
@@ -72,8 +102,15 @@ module.exports.pending = async (req, res, next) => {
 module.exports.del = async (req, res, next) => {
   try {
     const { id } = req.body;
+    const exist = await taskModel.exists({ _id: id });
+    if (exist == null) {
+      return res
+        .status(404)
+        .json({ msg: "Task does not exist", exist, status: false });
+    }
+
     const task = await taskModel.deleteOne({ _id: id });
-    return res.status(200).json({ msg: "Task Deleted", task, status: true });
+    return res.status(200).json({ msg: "Task Deleted", exist, status: true });
   } catch (ex) {
     next(ex);
   }

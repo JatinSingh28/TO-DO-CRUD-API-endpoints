@@ -110,7 +110,7 @@ module.exports.del = async (req, res, next) => {
     }
 
     const task = await taskModel.deleteOne({ _id: id });
-    return res.status(200).json({ msg: "Task Deleted", exist, status: true });
+    return res.status(200).json({ msg: "Task Deleted", task, status: true });
   } catch (ex) {
     next(ex);
   }

@@ -9,8 +9,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use('/',verify)
 app.use("/api",taskRoutes);
+app.use('/',verify)
+
 
 mongoose
   .connect(process.env.MONGO_URL, {
